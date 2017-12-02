@@ -1,3 +1,6 @@
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
+
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -77,3 +80,4 @@ typedef struct xbox_map {
 int xbox_open(char *file_name);
 void xbox_close(int xbox_fd);
 int xbox_map_read(int xbox_fd, xbox_map_t *map);
+#endif

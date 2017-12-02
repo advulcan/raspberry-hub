@@ -4,14 +4,18 @@
 #include <string.h>  
 #include <math.h>
 #include "controller.h"
-//int L1 = 0;
-//int L2 = 2;
-//int R1 = 3;
-//int R2 = 4;
-int L1 = 0;
-int L2 = 2;
-int R1 = 4;
-int R2 = 3;
+#include "monitor.h"
+/*
+//acc ref
+digitalWrite(INT1, HIGH);
+digitalWrite(INT2, LOW);
+digitalWrite(INT3, LOW);
+digitalWrite(INT4, HIGH);
+*/
+int INT1 = 3;//left
+int INT2 = 4;//left
+int INT3 = 0;//right
+int INT4 = 2;//right
 
 
 char *exitControl = "exit";
@@ -22,88 +26,46 @@ char *down = "s";
 const int BUFFER_SIZE = 11;
 const int EQUAL_RESULT = 10;
 
-void initM();
-//void autoDrive();
-//void keyboardDrive();
 
-void forward(int x, int y);
-void backward(int x, int y);
-void brake(int x, int y);
-void turnLL();
-void turnRR();
-void forwardFF();
-void backward();
-void brakeBB();
-
-//void autoDrive()
-//{
-//	for (;;)
-//	{
-//		turnLL();
-//		brake();
-//		forward();
-//		brake();
-//		turnLL();
-//		brake();
-//		forward();
-//		brake();
-//	}
-//}
 void initM()
 {
 	wiringPiSetup();
-	pinMode(L1, OUTPUT);
-	pinMode(L2, OUTPUT);
-	pinMode(R1, OUTPUT);
-	pinMode(R2, OUTPUT);
+	pinMode(INT1, OUTPUT);
+	pinMode(INT2, OUTPUT);
+	pinMode(INT3, OUTPUT);
+	pinMode(INT4, OUTPUT);
 }
-void forward (int x, int y){
-	digitalWrite(x, LOW);
-	digitalWrite(y, HIGH);
+void leftForward (){
+	digitalWrite(INT1, HIGH);
+	digitalWrite(INT2, LOW);
 }
-void backward(int x, int y){
-	digitalWrite(x, HIGH);
-	digitalWrite(y, LOW);
+void rightForward() {
+	digitalWrite(INT3, LOW);
+	digitalWrite(INT4, HIGH);
 }
-void brake(int x, int y) {
-	digitalWrite(x, LOW);
-	digitalWrite(y, LOW);
+void leftBackward() {
+	digitalWrite(INT1, LOW);
+	digitalWrite(INT2, HIGH);
 }
-
-void turnLL()
-{
-	forward(L1, L2);
-	backward(R1, R2);
-	//delay(1000);
+void rightBackward() {
+	digitalWrite(INT3, HIGH);
+	digitalWrite(INT4, LOW);
 }
-
-void turnRR()
-{
-	forward(R1, R2);
-	backward(L1, L2);
-	//delay(1000);
+void leftBrake() {
+	digitalWrite(INT1, LOW);
+	digitalWrite(INT2, LOW);
 }
-
-void forwardFF()
-{
-	forward(L1, L2);
-	forward(R1, R2);
-	//delay(1000);
+void rightBrake() {
+	digitalWrite(INT3, LOW);
+	digitalWrite(INT4, LOW);
+}
+void brake() {
+	digitalWrite(INT1, LOW);
+	digitalWrite(INT2, LOW);
+	digitalWrite(INT3, LOW);
+	digitalWrite(INT4, LOW);
 }
 
-void backward()
-{
-	backward(L1, L2);
-	backward(R1, R2);
-	//delay(1000);
-}
-
-void brakeBB()
-{
-	brake(L1, L2);
-	brake(R1, R2);
-	//delay(1000);
-}
 
 void keyboardDrive() {
 	printf("Let's GO!\n");
@@ -121,23 +83,27 @@ void keyboardDrive() {
 			break;
 		}
 		else if (strcmp(str, left) == EQUAL_RESULT) {
-			turnLL();
+			leftBackward();
+			rightForward();
 		}
 		else if (strcmp(str, right) == EQUAL_RESULT) {
-			turnRR();
+			leftForward();
+			rightBackward();
 		}
 		else if (strcmp(str, up) == EQUAL_RESULT) {
-			forwardFF();
+			leftForward();
+			rightForward();
 		}
 		else if (strcmp(str, down) == EQUAL_RESULT) {
-			backward();
+			leftBackward();
+			rightBackward();
 		}
-		brakeBB();
+		brake();
 	}
 
 }
 
-void checkLeftStick(xbox_map_t map) {
+void byLeftStick(xbox_map_t map) {
 	printf("\tleft(%-6d,%-6d)", map.lx, map.ly);
 	int x = map.lx;
 	int y = map.ly;
@@ -149,22 +115,71 @@ void checkLeftStick(xbox_map_t map) {
 	}
 	if (abs(x) > abs(y)) {
 		if (x > 0) {
-				turnRR();
+				//turnRR();
 			}else {
-				turnLL();
+				//turnLL();
 			}
 	}else {
 		if (y < 0) {
-			forwardFF();
+			//forwardFF();
 		}else {
-			backward();
+			//backward();
 		}
 	}
 	if(x==0 && y==0){
-		brakeBB();
+		//brakeBB();
 	}
 }
-
+void byLeftAndTrigger(xbox_map_t map) {
+	//printf("\tleft(%-6d,%-6d)", map.lx, map.ly);
+	int x = map.lx;
+	int y = map.ly;
+	int lt = map.lt;
+	int rt = map.rt;
+	if ((abs(x) < 10000)) {
+		x = 0;
+	}
+	if ((abs(y) < 10000)) {
+		y = 0;
+	}
+	
+	if (rt < 0 && lt < 0) {
+		if (x < 0) {
+			leftBackward();
+			rightForward();
+		}else if (x > 0) {
+			leftForward();
+			rightBackward();
+		}else {
+			brake();
+		}
+	}else if (rt > 0 && lt<0 ) {
+		if (x > 0) {
+			leftForward();
+			rightBrake();
+		}else if(x<0){
+			rightForward();
+			leftBrake();
+		}else {
+			leftForward();
+			rightForward();
+		}
+	}else if(lt > 0 && rt<0){
+		if (x > 0) {
+			rightBackward();
+			leftBrake();
+		}else if (x<0) {
+			leftBackward();
+			rightBrake();
+		}else {
+			rightBackward();
+			leftBackward();
+		}
+	}else {
+		brake();
+	}
+	
+}
 
 int stickDrive() {
 	int xbox_fd;
@@ -190,11 +205,15 @@ int stickDrive() {
 			continue;
 		}
 
-		printf("\rTime:%8d A:%d B:%d X:%d Y:%d LB:%d RB:%d start:%d back:%d home:%d LO:%d RO:%d XX:%-6d YY:%-6d LX:%-6d LY:%-6d RX:%-6d RY:%-6d LT:%-6d RT:%-6d",
+		/*printf("\rTime:%8d A:%d B:%d X:%d Y:%d LB:%d RB:%d start:%d back:%d home:%d LO:%d RO:%d XX:%-6d YY:%-6d LX:%-6d LY:%-6d RX:%-6d RY:%-6d LT:%-6d RT:%-6d",
 			map.time, map.a, map.b, map.x, map.y, map.lb, map.rb, map.start, map.back, map.home, map.lo, map.ro,
-			map.xx, map.yy, map.lx, map.ly, map.rx, map.ry, map.lt, map.rt);
-		fflush(stdout);
-		checkLeftStick(map);
+			map.xx, map.yy, map.lx, map.ly, map.rx, map.ry, map.lt, map.rt);*/
+	/*	printf("\rLX:%-6d LY:%-6d RX:%-6d RY:%-6d LT:%-6d RT:%-6d",map.lx, map.ly, map.rx, map.ry, map.lt, map.rt);
+		fflush(stdout);*/
+		refresh(map);
+
+		//byLeftStick(map);
+		byLeftAndTrigger(map);
 	}
 
 	xbox_close(xbox_fd);
@@ -204,6 +223,7 @@ int stickDrive() {
 int main(void)
 {
 	initM();
+	initMonitor(29);
 	//autoDrive();
 	stickDrive();
 
