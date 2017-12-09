@@ -166,11 +166,11 @@ void byLeftAndTrigger(xbox_map_t map) {
 		}
 	}else if(lt > 0 && rt<0){
 		if (x > 0) {
-			rightBackward();
-			leftBrake();
-		}else if (x<0) {
 			leftBackward();
 			rightBrake();
+		}else if (x<0) {
+			rightBackward();
+			leftBrake();
 		}else {
 			rightBackward();
 			leftBackward();

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h> 
 #include "controller.h"
+#include "display.h"
 
 void initMonitor(int pin);
 void refresh(int count);
