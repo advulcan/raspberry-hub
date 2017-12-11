@@ -1,4 +1,4 @@
-package com.rpi.demo.pi4j_demo;
+package com.rpi.pi4j.example;
 
 	/*
 	 * #%L
