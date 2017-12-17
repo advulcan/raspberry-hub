@@ -1,6 +1,7 @@
 #include<stdio.h> 
 #include<stdint.h> 
 #include<fcntl.h> 
+#include <unistd.h>
 #include<sys/ioctl.h> 
 #include<linux/i2c.h> 
 #include<linux/i2c-dev.h>
@@ -166,7 +167,7 @@ double bmp280_compensate_P_double(BMP280_S32_t adc_P, unsigned short dig_P1, sho
 	p = p + (var1 + var2 + ((double)dig_P7)) / 16.0;
 	return p;
 }
-void bmp280_compensate_TnP_double(double* result, long adc_T, unsigned short dig_T1, short dig_T2, short dig_T3, long adc_P,
+double bmp280_compensate_TnP_double(double* result, long adc_T, unsigned short dig_T1, short dig_T2, short dig_T3, long adc_P,
 	unsigned short dig_P1, short dig_P2, short dig_P3, short dig_P4, short dig_P5, short dig_P6, short dig_P7, short dig_P8, short dig_P9)
 {
 	double var1, var2, temperature, pressure;
@@ -221,8 +222,8 @@ int main() {
 	writeReg(file, REG_CONFIG, REG_CONFIG_VALUE);
 	writeReg(file, REG_CTRL_MEAS, REG_CTRL_MEAS_VALUE);
 	usleep(888000);
-	unsigned char buff_dig[24];
-	unsigned char buff_m[6];
+	char buff_dig[24];
+	char buff_m[6];
 	while (1) {
 		//resetSensor(file);
 		readReg(file, 0x88, buff_dig, 24);
@@ -277,7 +278,7 @@ int main() {
 		//printf("R: %d, %d\n", teperature, pressure);
 		printf("R: %f, %f\t", t_int, p_int);
 		printf("R: %f, %f\n", t, p);
-		//break;
+		break;
 		usleep(888000);
 
 	}

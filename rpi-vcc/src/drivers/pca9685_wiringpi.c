@@ -18,11 +18,8 @@
 #define ALLLED_OFF_H 0xFD
 
 int pca9685_init(unsigned char addr)	// addrÊÇ7Î»µÄi2c´Ó»úµØÖ·£¬·µ»ØµÄÊÇlinux±ê×¼µÄÉè±¸ÃèÊö·û£¬µ÷ÓÃËüµÄµØ·½ÊÓ×÷pca9685µÄÉè±¸ÃèÊö·û
-										//ÒòÎª¿ÉÒÔ¶à¸öpca9685¼¶Áª£¬Í¨¹ıÉè±¸ÃèÊö·ûÇø±ğËüÃÇ
-										//´ËÇı¶¯½ö×÷ÎªÇı¶¯¶æ»úÊ¹ÓÃ£¬ÖÜÆÚ¹Ì¶¨ËÀÎ»20ms£¬²»ÔÊĞíÍâ²¿ÉèÖÃ
 {
-	int pca9685;
-	pca9685 = wiringPiI2CSetup(addr);
+	int pca9685 = wiringPiI2CSetup(addr);
 
 	{	//³õÊ¼»¯pca9685Ğ¾Æ¬
 		double T = 20000;	//ÖÜÆÚ£¬µ¥Î»ÊÇus
@@ -45,15 +42,15 @@ int pca9685_init(unsigned char addr)	// addrÊÇ7Î»µÄi2c´Ó»úµØÖ·£¬·µ»ØµÄÊÇlinux±ê×
 
 	return pca9685;
 }
-
-void pca9685_setmk(int fd, int num, int mk)	//ÉèÖÃÖ¸¶¨Í¨µÀµÄÂö¿í¡£fdÊÇÔÚpca9685_initÊ±»ñµÃµÄÉè±¸ÃèÊö·û£¬numÊÇÍ¨µÀºÅ£¨´Ó0¿ªÊ¼£©£¬mkÊÇÂö¿íµ¥Î»ÊÇus¡£ÖÜÆÚÒÑ¾­¹Ì¶¨Îª20msÁË
+void pca9685_setmk(int fd, int channel, int left, int right)	//ÉèÖÃÖ¸¶¨Í¨µÀµÄÂö¿í¡£fdÊÇÔÚpca9685_initÊ±»ñµÃµÄÉè±¸ÃèÊö·û£¬numÊÇÍ¨µÀºÅ£¨´Ó0¿ªÊ¼£©£¬mkÊÇÂö¿íµ¥Î»ÊÇus¡£ÖÜÆÚÒÑ¾­¹Ì¶¨Îª20msÁË
 {
+	//fd = wiringPiI2CSetup(0x70);
 	unsigned int ON, OFF;
-	ON = 0;	//Ã¿´ÎÖÜÆÚÒ»¿ªÊ¼¾ÍÊä³ö¸ßµçÆ½
-	//ON = (unsigned int)((((double)1000) / 20000 * 4096)*1.0067114);
-	OFF = (unsigned int)((((double)mk) / 20000 * 4096)*1.0067114);	//×îºóµÄ1.0067114ÊÇĞ£×¼ÓÃµÄ
-																	//    printf("off = 0x%x", OFF);
-
-	wiringPiI2CWriteReg16(fd, LED0_ON_L + 4 * num, ON);
-	wiringPiI2CWriteReg16(fd, LED0_OFF_L + 4 * num, OFF);
+	//ON = 0;	//Ã¿´ÎÖÜÆÚÒ»¿ªÊ¼¾ÍÊä³ö¸ßµçÆ½
+	ON = (unsigned int)((((double)left) / 20000 * 4096)*1.0067114);
+	OFF = (unsigned int)((((double)right) / 20000 * 4096)*1.0067114);	//×îºóµÄ1.0067114ÊÇĞ£×¼ÓÃµÄ
+	//    printf("off = 0x%x", OFF);
+	wiringPiI2CWriteReg16(fd, LED0_ON_L + 4 * channel, ON);
+	wiringPiI2CWriteReg16(fd, LED0_OFF_L + 4 * channel, OFF);
+	//close(fd); 
 }
