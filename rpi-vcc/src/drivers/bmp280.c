@@ -19,7 +19,7 @@
 //01011111 5f temp x2 press x16 recommended
 #define REG_CTRL_MEAS_VALUE 0x5f
 
-//765 duration standby in normal mode. 432 time constant of the IIR filter, bit 0 = 1enable spi
+//765 duration standby in normal mode. 432 time constant of the IIR filter, bit 0 = 1 enable spi
 //00011100
 #define REG_CONFIG 0x1c
 //00011100=0x60

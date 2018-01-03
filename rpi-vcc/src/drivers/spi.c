@@ -5,7 +5,7 @@
 void main(void)
 {
     unsigned char buff[2];
-    int spiChannel = 0;
+    int spiChannel = 1;
     wiringPiSetup();
     int spi1 = wiringPiSPISetup(spiChannel, 1000000);
 	printf("id:%d\n",spi1);
