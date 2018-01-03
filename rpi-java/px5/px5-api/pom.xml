@@ -23,6 +23,11 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.25</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -34,6 +39,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.0.2</version>
 				<executions>
 					<execution>
 						<id>copy-dependencies</id>
@@ -51,6 +57,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
 				<configuration>
 					<archive>
 						<index>true</index>
@@ -66,6 +73,23 @@
 							<classpath>. pi4j-core.jar</classpath> </manifestEntries> -->
 					</archive>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<!-- <version>3.0.7</version> -->
+				<executions>
+					<execution>
+						<id>shell</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>${basedir}/uncompress.sh</executable>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
