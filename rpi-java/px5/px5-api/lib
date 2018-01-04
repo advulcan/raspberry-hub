@@ -1,0 +1,9 @@
+# !javah -cp src/main/java -d src/main/cpp org.px5.io.BTJoystick
+# !gcc -c -o target/org_px5_io_BTJoystick.o src/main/cpp/org_px5_io_BTJoystick.cpp
+# !/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
+
+echo "compiling"
+gcc -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux -fPIC -c -o target/org_px5_io_BTJoystick.o src/main/cpp/org_px5_io_BTJoystick.cpp
+echo "creating lib"
+gcc -shared -Wl,-soname,libbtjoystick.so.so -o src/main/cpp/libbtjoystick.so target/org_px5_io_BTJoystick.o
+echo "done"
