@@ -34,6 +34,9 @@
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
+			<resource>
+				<directory>src/main/cpp</directory>
+			</resource>
 		</resources>
 		<plugins>
 			<plugin>
@@ -79,7 +82,7 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<!-- <version>3.0.7</version> -->
 				<executions>
-					<execution>
+					<!-- <execution>
 						<id>shell</id>
 						<phase>package</phase>
 						<goals>
@@ -88,7 +91,7 @@
 						<configuration>
 							<executable>${basedir}/uncompress.sh</executable>
 						</configuration>
-					</execution>
+					</execution> -->
 				</executions>
 			</plugin>
 		</plugins>
