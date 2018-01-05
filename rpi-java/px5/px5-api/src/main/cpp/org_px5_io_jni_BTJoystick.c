@@ -13,10 +13,15 @@ JNIEXPORT jint JNICALL Java_org_px5_io_jni_BTJoystick_jsQuery
 	int len = 0;
 	Controller controller;
 	while (1){
+		//printf("before\n");
+		//block until new event
 		len = controller.xbox_map_read();
+		//printf("after\n");
 		if (len < 0)
 		{
-			usleep(10 * 1000);
+			//should never be here
+			printf("!!!\n");
+			usleep(1000 * 1000);
 			continue;
 		}
 		//printf("123");

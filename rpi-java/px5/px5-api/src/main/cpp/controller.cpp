@@ -12,6 +12,7 @@ int Controller::xbox_open(char *file_name){
 int Controller::xbox_map_read(){
 	int len, type, number, value;
 	struct js_event js;
+	//block until new event
 	len = read(xbox_fd, &js, sizeof(struct js_event));
 	if (len < 0){
 		perror("read");
@@ -135,7 +136,7 @@ int main1(){
 		len = controller.xbox_map_read();
 		if (len < 0)
 		{
-			usleep(10 * 1000);
+			usleep(1000 * 1000);
 			continue;
 		}
 		//printf("123");
