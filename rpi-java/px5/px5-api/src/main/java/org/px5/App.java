@@ -23,6 +23,6 @@ public class App {
 		}
 		LOGGER.info("Hello World!");
 		BTJoystick js = new BTJoystick();
-		js.jsInput(1);
+		js.jsQuery();
 	}
 }

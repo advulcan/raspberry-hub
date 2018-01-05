@@ -17,6 +17,14 @@ JNIEXPORT jint JNICALL Java_org_px5_io_jni_BTJoystick_jsInput
 
 /*
  * Class:     org_px5_io_jni_BTJoystick
+ * Method:    jsQuery
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_org_px5_io_jni_BTJoystick_jsQuery
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_px5_io_jni_BTJoystick
  * Method:    init
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */

@@ -7,3 +7,8 @@ gcc -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux -fPIC -c -o target/btjoy
 echo "creating lib"
 gcc -shared -Wl,-soname,libbtjoystick.so -o src/main/resources/libbtjoystick.so target/btjoystick.o
 echo "done"
+
+g++ -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux -fPIC -c -o target/btjoystick.o src/main/cpp/org_px5_io_jni_BTJoystick.c
+g++ -fPIC -c -o target/controller.o src/main/cpp/controller.cpp
+g++ -shared -Wl,-soname,libbtjoystick.so -o src/main/resources/libbtjoystick.so target/btjoystick.o target/controller.o
+g++ -ldl -shared -Wl,-soname,libcontroller.so -o src/main/resources/libcontroller.so  target/controller.o
