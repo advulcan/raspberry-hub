@@ -1,1 +1,1 @@
-java -Djava.library.path=src/main/cpp -jar target/px5-api-0.0.1-SNAPSHOT.jar
+java -jar target/px5-api-0.0.1-SNAPSHOT.jar
