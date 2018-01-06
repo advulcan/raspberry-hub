@@ -8,7 +8,21 @@ int Controller::xbox_open(char *file_name){
 	}
 	return xbox_fd;
 }
-
+int * Controller::xbox_event_read(){
+	int len, type, number, value;
+	struct js_event js;
+	int result [4] = {0,0,0,0};
+	//block until new event
+	len = read(xbox_fd, &js, sizeof(struct js_event));
+	if (len > 0){
+		perror("read");
+		result[0] = js.type;
+		result[0] = js.number;
+		result[0] = js.value;
+		result[0] = js.time;
+	}
+	return result;
+}
 int Controller::xbox_map_read(){
 	int len, type, number, value;
 	struct js_event js;
@@ -129,7 +143,7 @@ void Controller::xbox_close(int xbox_fd){
 	return;
 }
 
-int main1(){
+int main(){
 	int len = 0;
 	Controller controller;
 	while (1){

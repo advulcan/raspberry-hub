@@ -1,0 +1,21 @@
+CC = g++
+CFLAGS = -Wall -lwiringPi -l pthread -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux -fPIC
+#LIBFLAGS =-shared -Wl,-soname,libbtjoystick.so
+SRCDIR = src/main/cpp
+#RESDIR = src/main/resources
+RESDIR = .
+OBJDIR = target
+
+vpath %.h src:$(SRCDIR)
+vpath %.c src:$(SRCDIR)
+vpath %.hpp src:$(SRCDIR)
+vpath %.cpp src:$(SRCDIR)
+
+$(OBJDIR)/controller.o : controller.h
+$(RESDIR)/libbtjoystick.so : controller.o org_px5_io_jni_BTJoystick.o
+	$(CC) -shared -Wall -o $@ $^
+$(OBJDIR)/org_px5_io_jni_BTJoystick.o : org_px5_io_jni_BTJoystick.h
+
+.PHONY : clean	
+clean :
+	rm controller.o org_px5_io_jni_BTJoystick.o libbtjoystick.so

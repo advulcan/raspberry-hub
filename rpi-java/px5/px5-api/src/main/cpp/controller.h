@@ -89,6 +89,7 @@ public:
 	int xbox_open(char *file_name);
 	void xbox_close(int xbox_fd);
 	int xbox_map_read();
+	int * xbox_event_read();
 
 private:
 	int xbox_fd;

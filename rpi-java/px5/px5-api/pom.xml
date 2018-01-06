@@ -34,9 +34,9 @@
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
-			<resource>
+		<!-- 	<resource>
 				<directory>src/main/cpp</directory>
-			</resource>
+			</resource> -->
 		</resources>
 		<plugins>
 			<plugin>
