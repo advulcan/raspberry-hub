@@ -11,15 +11,18 @@ int Controller::xbox_open(char *file_name){
 int * Controller::xbox_event_read(){
 	int len, type, number, value;
 	struct js_event js;
-	int result [4] = {0,0,0,0};
+	int * result = new int[4];
 	//block until new event
 	len = read(xbox_fd, &js, sizeof(struct js_event));
-	if (len > 0){
-		perror("read");
-		result[0] = js.type;
-		result[0] = js.number;
-		result[0] = js.value;
+	if (len >= 0){
 		result[0] = js.time;
+		result[1] = js.type;
+		result[2] = js.number;
+		result[3] = js.value;
+		//printf("readed(%d,%d,%d,%d)\n",result[0],result[1],result[2],result[3]);
+	}else{
+		printf("0 len");
+		result[0] = 0;
 	}
 	return result;
 }
@@ -28,8 +31,9 @@ int Controller::xbox_map_read(){
 	struct js_event js;
 	//block until new event
 	len = read(xbox_fd, &js, sizeof(struct js_event));
+	printf("len:%d", len);
 	if (len < 0){
-		perror("read");
+		//printf("len<0");
 		return -1;
 	}
 	type = js.type;
@@ -130,6 +134,7 @@ int Controller::xbox_map_read(){
 	else
 	{
 		/* Init do nothing */
+		perror("nothing");
 	}
 	printf("\rTime:%8d A:%d B:%d X:%d Y:%d LB:%d RB:%d start:%d back:%d home:%d LO:%d RO:%d XX:%-6d YY:%-6d LX:%-6d LY:%-6d RX:%-6d RY:%-6d LT:%-6d RT:%-6d",
 				map.time, map.a, map.b, map.x, map.y, map.lb, map.rb, map.start, map.back, map.home, map.lo, map.ro,
@@ -147,12 +152,19 @@ int main(){
 	int len = 0;
 	Controller controller;
 	while (1){
-		len = controller.xbox_map_read();
+		int * result = controller.xbox_event_read();
+		//printf("size(%d)\n",sizeof(result));
+		//printf("readed(%d,%d,%d,%d)\n",result[0],result[1],result[2],result[3]);
+		delete []result;
+		/*len = controller.xbox_map_read();
 		if (len < 0)
 		{
+			printf("len<0");
 			usleep(1000 * 1000);
 			continue;
-		}
+		}else if(len = 0){
+			printf("len=0");
+		}*/
 		//printf("123");
 	}
 	//controller = npt

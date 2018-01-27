@@ -58,6 +58,26 @@ int main(void) {
 			map.xx, map.yy, map.lx, map.ly, map.rx, map.ry, map.lt, map.rt);
 		fflush(stdout);
 		pwmbypca9685(fd, map.lt, map.rt);
+		int s = 900;
+		int f = 1100;
+		if (map.a == 1) {
+			pca9685_setmk(fd, 0, 0, f);//us
+		}
+		if (map.b==1){
+			pca9685_setmk(fd, 1, 0, f);//us
+		}
+		if (map.x == 1) {
+			pca9685_setmk(fd, 2, 0, f);//us
+		}
+		if (map.y == 1) {
+			pca9685_setmk(fd, 3, 0, f);//us
+		}
+		if (map.rb == 1) {
+			pca9685_setmk(fd, 0, 0, s);//us
+			pca9685_setmk(fd, 1, 0, s);//us
+			pca9685_setmk(fd, 2, 0, s);//us
+			pca9685_setmk(fd, 3, 0, s);//us
+		}
 	}
 
 	xbox_close(xbox_fd);

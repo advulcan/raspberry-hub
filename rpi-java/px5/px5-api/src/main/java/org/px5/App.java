@@ -15,14 +15,35 @@ public class App {
 	private static Logger LOGGER = LoggerFactory.getLogger(App.class);
 	
 	public static void main(String[] args) {
-		try {
-			JNIUtil.loadLibraryFromJar("/libbtjoystick.so");
-		} catch (IOException e) {
-			e.printStackTrace();
-			LOGGER.error(e.getMessage());
-		}
 		LOGGER.info("Hello World!");
 		BTJoystick js = new BTJoystick();
-		js.jsQuery();
+		//js.jsQuery();
+		//js.readEvent();
+		readEvent(js);
+		
+	}
+
+	private static void readEvent(BTJoystick js) {
+		while(true) {
+			int[] event = js.readEvent();
+			if(event.length == 4) {
+				int time = event[0];
+				int type = event[1];
+				int number = event[2];
+				int value = event[3];
+				LOGGER.info("time :{}, type :{}, number :{}, value :{}", time, type, number, value);
+				if(time > 0) {
+				}else {
+					LOGGER.error("empty event");
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}else {
+				LOGGER.error("invalid event length");
+			}
+		}
 	}
 }
